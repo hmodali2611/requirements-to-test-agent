@@ -1,0 +1,26 @@
+name: Real LLM generation
+# Runs the agent with a real model. Add the ANTHROPIC_API_KEY repository secret to enable.
+on:
+  workflow_dispatch:
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      LLM_PROVIDER: anthropic
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - name: Check for API key
+        if: env.ANTHROPIC_API_KEY == ''
+        run: |
+          echo "::error::Add the ANTHROPIC_API_KEY repository secret to run this workflow."
+          exit 1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: req2test generate stories/checkout.md --out out/llm
+      - uses: actions/upload-artifact@v4
+        with:
+          name: llm-test-cases
+          path: out/llm/

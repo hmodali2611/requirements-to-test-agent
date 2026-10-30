@@ -125,7 +125,7 @@ class MockLLM:
 def get_llm() -> LLM:
     choice = os.environ.get("LLM_PROVIDER", "mock").lower()
     if choice == "anthropic":
-        return AnthropicLLM(os.environ["ANTHROPIC_API_KEY"], os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-5"))
+        return AnthropicLLM(os.environ["ANTHROPIC_API_KEY"], os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5-5"))
     if choice == "openai":
         return OpenAILLM(os.environ["OPENAI_API_KEY"], os.environ.get("OPENAI_MODEL", "gpt-4o-mini"))
     return MockLLM()

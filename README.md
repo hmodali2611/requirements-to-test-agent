@@ -1,5 +1,7 @@
 # Requirements-to-Test Agent
 
+[![CI](https://github.com/hmodali2611/requirements-to-test-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/hmodali2611/requirements-to-test-agent/actions/workflows/ci.yml)
+
 An LLM agent that reads user stories and acceptance criteria and produces **prioritized, traceable test cases**: Gherkin `.feature` files, a CSV ready for TestRail / Xray / Zephyr import, and a traceability matrix that shows every criterion is covered.
 
 ```text
@@ -85,6 +87,10 @@ As a shopper I want to apply a promo code so that I pay the discounted price
 ## Tech
 
 Python · Pydantic · LLM APIs (Anthropic, OpenAI) · Gherkin / Cucumber · pytest · GitHub Actions
+
+## Run with a real model in CI
+
+Add an `ANTHROPIC_API_KEY` repository secret, then run the **Real LLM generation** workflow from the Actions tab. The generated features, CSV and traceability matrix are uploaded as an artifact.
 
 ## License
 

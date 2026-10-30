@@ -1,0 +1,48 @@
+ID,Story,Title,Type,Priority,Preconditions,Steps,Expected Result,Covers
+SHOP-101-TC01,SHOP-101,"Verify: A valid, active promo code reduces the order total by its discount percentage",functional,P1,Test user and data from the test data set,"1. Open the feature under test
+2. Perform the action described in AC1
+3. Observe the result","A valid, active promo code reduces the order total by its discount percentage",AC1
+SHOP-101-TC02,SHOP-101,"Verify: An expired promo code shows the message ""This code has expired"" and the total is unchanged",functional,P1,Test user and data from the test data set,"1. Open the feature under test
+2. Perform the action described in AC2
+3. Observe the result","An expired promo code shows the message ""This code has expired"" and the total is unchanged",AC2
+SHOP-101-TC03,SHOP-101,Negative: AC2 with invalid input or state,negative,P1,"Invalid, expired or unauthorized data from the test data set","1. Attempt the action in AC2 with invalid input or state
+2. Observe the message and resulting state","The system rejects it as specified: An expired promo code shows the message ""This code has expired"" and the total is unchanged",AC2
+SHOP-101-TC04,SHOP-101,Negative: AC4 with invalid input or state,negative,P1,"Invalid, expired or unauthorized data from the test data set","1. Attempt the action in AC4 with invalid input or state
+2. Observe the message and resulting state",The system rejects it as specified: Only one promo code can be applied per order,AC4
+SHOP-101-TC05,SHOP-101,Verify: Promo codes are case-insensitive,functional,P2,Test user and data from the test data set,"1. Open the feature under test
+2. Perform the action described in AC3
+3. Observe the result",Promo codes are case-insensitive,AC3
+SHOP-101-TC06,SHOP-101,Verify: Only one promo code can be applied per order,functional,P2,Test user and data from the test data set,"1. Open the feature under test
+2. Perform the action described in AC4
+3. Observe the result",Only one promo code can be applied per order,AC4
+SHOP-101-TC07,SHOP-101,Verify: The promo code field accepts at most 20 characters,functional,P2,Test user and data from the test data set,"1. Open the feature under test
+2. Perform the action described in AC5
+3. Observe the result",The promo code field accepts at most 20 characters,AC5
+SHOP-101-TC08,SHOP-101,Boundary: AC5 at 20 and 21,boundary,P2,Data set up to reach the limit of 20,"1. Enter or add exactly 20
+2. Verify it is accepted
+3. Enter or add 21
+4. Verify it is rejected with the documented message",20 is accepted and 21 is rejected,AC5
+SHOP-102-TC01,SHOP-102,Verify: Tapping the heart icon on a product adds it to the wishlist,functional,P1,Test user and data from the test data set,"1. Open the feature under test
+2. Perform the action described in AC1
+3. Observe the result",Tapping the heart icon on a product adds it to the wishlist,AC1
+SHOP-102-TC02,SHOP-102,"Verify: A wishlist holds at most 50 items; adding a 51st shows ""Wishlist is full""",functional,P1,Test user and data from the test data set,"1. Open the feature under test
+2. Perform the action described in AC2
+3. Observe the result","A wishlist holds at most 50 items; adding a 51st shows ""Wishlist is full""",AC2
+SHOP-102-TC03,SHOP-102,Negative: AC2 with invalid input or state,negative,P1,"Invalid, expired or unauthorized data from the test data set","1. Attempt the action in AC2 with invalid input or state
+2. Observe the message and resulting state","The system rejects it as specified: A wishlist holds at most 50 items; adding a 51st shows ""Wishlist is full""",AC2
+SHOP-102-TC04,SHOP-102,Negative: AC3 with invalid input or state,negative,P1,"Invalid, expired or unauthorized data from the test data set","1. Attempt the action in AC3 with invalid input or state
+2. Observe the message and resulting state",The system rejects it as specified: Guests who tap the heart icon are asked to sign in,AC3
+SHOP-102-TC05,SHOP-102,Boundary: AC2 at 50 and 51,boundary,P2,Data set up to reach the limit of 50,"1. Enter or add exactly 50
+2. Verify it is accepted
+3. Enter or add 51
+4. Verify it is rejected with the documented message",50 is accepted and 51 is rejected,AC2
+SHOP-102-TC06,SHOP-102,Verify: Guests who tap the heart icon are asked to sign in,functional,P2,Test user and data from the test data set,"1. Open the feature under test
+2. Perform the action described in AC3
+3. Observe the result",Guests who tap the heart icon are asked to sign in,AC3
+SHOP-102-TC07,SHOP-102,"Verify: The wishlist syncs between the iOS app, the Android app and the website",functional,P2,Test user and data from the test data set,"1. Open the feature under test
+2. Perform the action described in AC4
+3. Observe the result","The wishlist syncs between the iOS app, the Android app and the website",AC4
+SHOP-102-TC08,SHOP-102,"Cross-platform: AC4 on iOS, Android and web",cross_platform,P2,"Same account signed in on iOS, Android and web","1. Make the change on iOS
+2. Refresh Android and web
+3. Make a change on web
+4. Refresh iOS and Android",All three platforms show the same state within the sync window,AC4

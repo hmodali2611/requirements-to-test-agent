@@ -2,7 +2,25 @@
 
 [![CI](https://github.com/hmodali2611/requirements-to-test-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/hmodali2611/requirements-to-test-agent/actions/workflows/ci.yml)
 
-An LLM agent that reads user stories and acceptance criteria and produces **prioritized, traceable test cases**: Gherkin `.feature` files, a CSV ready for TestRail / Xray / Zephyr import, and a traceability matrix that shows every criterion is covered.
+## What it is
+
+An LLM agent that reads user stories and acceptance criteria and produces prioritized, traceable test cases: Gherkin `.feature` files, a CSV ready for TestRail / Xray / Zephyr import, and a traceability matrix that shows every criterion is covered.
+
+## Why it exists
+
+A single prompt usually returns happy-path tests and quietly skips the expired coupon, the 51st wishlist item, and the Android-to-web sync. This tool reviews the model's work with deterministic coverage rules and sends back only what is missing, so gaps stay visible instead of being hidden.
+
+## Scope and limits
+
+In scope:
+
+- Outputs: Gherkin `.feature` files, a CSV for TestRail / Xray / Zephyr import, and a traceability matrix.
+- Deterministic coverage review: every criterion covered, plus negative, boundary and cross-platform tests where wording triggers them, with Pydantic validation and open gaps reported, never hidden.
+- Mock model offline, real model with Anthropic or OpenAI.
+
+Out of scope: executing the generated tests, healing locators, and running mobile or web suites.
+
+## Features and how it works
 
 ```text
 $ req2test generate stories/checkout.md
@@ -11,15 +29,7 @@ SHOP-102: 8 tests in 2 round(s), all criteria covered
 Wrote out/features/, test-cases.csv and traceability.md
 ```
 
-## Why an agent, not a single prompt
-
-A single prompt usually returns happy-path tests and quietly skips the expired coupon, the 51st wishlist item, and the Android-to-web sync. This tool reviews the model's work with **deterministic coverage rules** and sends back only what is missing:
-
-```text
-story ─▶ draft tests (LLM) ─▶ validate (Pydantic) ─▶ review coverage (rules) ─┐
-             ▲                                                                 │
-             └────────────── "GAPS: negative AC2, boundary AC5" ◀──────────────┘   up to --max-rounds
-```
+The loop is: story, draft tests (LLM), validate (Pydantic), review coverage (rules), and send back only the gaps, up to `--max-rounds`.
 
 The review checks that each acceptance criterion has:
 
@@ -32,22 +42,9 @@ The review checks that each acceptance criterion has:
 
 Invalid model output (missing steps, unknown criterion ids, wrong enum values) is rejected by the Pydantic schema and never reaches the output. Anything still uncovered after the last round is reported as an open gap, never hidden.
 
-## Output
+## Prerequisites
 
-See [`examples/sample-output/`](examples/sample-output/) for a full run on [`stories/checkout.md`](stories/checkout.md).
-
-```gherkin
-@SHOP-101-TC07 @P2 @boundary @AC5
-Scenario: Boundary: AC5 at 20 and 21
-  Given Data set up to reach the limit of 20
-  When Enter or add exactly 20
-  And Verify it is accepted
-  And Enter or add 21
-  And Verify it is rejected with the documented message
-  Then 20 is accepted and 21 is rejected
-```
-
-The bundled sample output comes from the offline **mock** model, so its steps are templated. With a real model (`LLM_PROVIDER=anthropic` or `openai`) the steps and expected results are specific to the story.
+A Python environment that can run the quick start commands below. No other prerequisite is stated in the original README.
 
 ## Quick start
 
@@ -62,6 +59,8 @@ export LLM_PROVIDER=anthropic ANTHROPIC_API_KEY=...
 req2test generate stories/checkout.md --out out
 ```
 
+## Usage
+
 Story format (works with text copied from Jira):
 
 ```markdown
@@ -73,11 +72,32 @@ As a shopper I want to apply a promo code so that I pay the discounted price
 - AC2: An expired promo code shows "This code has expired" and the total is unchanged
 ```
 
+Output: see [`examples/sample-output/`](examples/sample-output/) for a full run on [`stories/checkout.md`](stories/checkout.md).
+
+```gherkin
+@SHOP-101-TC07 @P2 @boundary @AC5
+Scenario: Boundary: AC5 at 20 and 21
+  Given Data set up to reach the limit of 20
+  When Enter or add exactly 20
+  And Verify it is accepted
+  And Enter or add 21
+  And Verify it is rejected with the documented message
+  Then 20 is accepted and 21 is rejected
+```
+
+The bundled sample output comes from the offline mock model, so its steps are templated. With a real model (`LLM_PROVIDER=anthropic` or `openai`) the steps and expected results are specific to the story.
+
+## Testing
+
+```bash
+pytest -q                                     # 11 tests
+```
+
 ## Project layout
 
 | Path | What it is |
 | --- | --- |
-| `src/req2test/agent.py` | Draft → validate → review → fill-gaps loop |
+| `src/req2test/agent.py` | Draft to validate to review to fill-gaps loop |
 | `src/req2test/models.py` | Pydantic schema for stories and test cases |
 | `src/req2test/parser.py` | Markdown story parser |
 | `src/req2test/exporters.py` | Gherkin, CSV and traceability output |
@@ -94,4 +114,4 @@ Add an `ANTHROPIC_API_KEY` repository secret, then run the **Real LLM generation
 
 ## License
 
-MIT
+MIT, Copyright (c) 2026 Harika Modali.
